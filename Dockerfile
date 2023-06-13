@@ -15,30 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN R -e 'install.packages("remotes", repos = "https://cloud.r-project.org")'
 
 # Define the R packages vector
-ENV R_PACKAGES="bs4Dash
-clustermq
-crew
-dplyr
-flextable
-future
-gt
-gtsummary
-knitr
-markdown
-mirai
-nanonext
-devtools
-igraph
-pingr
-rstudioapi
-shiny
-shinybusy
-shinyWidgets
-targets
-tarchetypes
-tidyverse
-visNetwork
-workflowr"
+ENV R_PACKAGES=$(cat r_packages.txt)
 
 # Install system dependencies for the specified R packages
 RUN Rscript -e 'args <- strsplit(Sys.getenv("R_PACKAGES"), "\n", fixed = TRUE)[[1]]; writeLines(remotes::system_requirements("ubuntu", "20.04", package = args))' | \

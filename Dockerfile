@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN R -e 'install.packages("remotes", repos = "https://cloud.r-project.org")'
 
 # Define the R packages vector
-ARG R_PACKAGES="bs4Dash
+ENV R_PACKAGES="bs4Dash
 clustermq
 crew
 dplyr
@@ -41,7 +41,7 @@ visNetwork
 workflowr"
 
 # Install system dependencies for the specified R packages
-RUN Rscript -e 'args <- commandArgs(trailingOnly = TRUE); writeLines(remotes::system_requirements("ubuntu", "20.04", package = strsplit(args, "\n", fixed = TRUE)[[1]]))' "$R_PACKAGES" | \
+RUN Rscript -e 'args <- strsplit(Sys.getenv("R_PACKAGES"), "\n", fixed = TRUE)[[1]]; writeLines(remotes::system_requirements("ubuntu", "20.04", package = args))' | \
     while read -r cmd; do \
     eval sudo $cmd; \
     done

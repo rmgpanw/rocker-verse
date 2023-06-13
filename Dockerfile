@@ -19,9 +19,9 @@ COPY r_packages.txt /
 
 # Install system dependencies for the specified R packages
 RUN R_PACKAGES=$(cat r_packages.txt) && \
-    Rscript -e 'args <- strsplit(Sys.getenv("R_PACKAGES"), "\n", fixed = TRUE)[[1]]; writeLines(remotes::system_requirements("ubuntu", "20.04", package = args))' | \
+    Rscript -e 'args <- strsplit(Sys.getenv("R_PACKAGES"), "\n", fixed = TRUE)[[1]]; args <- subset(args, args != ""); writeLines(remotes::system_requirements("ubuntu", "18.04", package = args))' | \
     while read -r cmd; do \
-    eval sudo $cmd; \
+    echo $cmd && eval sudo $cmd; \
     done
 
 # Continue with other steps to install and configure the specified R packages

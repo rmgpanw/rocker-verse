@@ -41,7 +41,7 @@ visNetwork
 workflowr"
 
 # Install system dependencies for the specified R packages
-RUN Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04", package = c(ARGV), sep = "\n"))' --args $R_PACKAGES | \
+RUN Rscript -e 'args <- commandArgs(trailingOnly = TRUE); writeLines(remotes::system_requirements("ubuntu", "20.04", package = strsplit(args, "\n", fixed = TRUE)[[1]]))' "$R_PACKAGES" | \
     while read -r cmd; do \
     eval sudo $cmd; \
     done

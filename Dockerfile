@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install remotes R package
 RUN R -e 'install.packages("remotes", repos = "https://cloud.r-project.org")'
 
+# Copy the r_packages.txt file to the image working directory
+COPY r_packages.txt /
+
 # Install system dependencies for the specified R packages
 RUN R_PACKAGES=$(cat r_packages.txt) && \
     Rscript -e 'args <- strsplit(Sys.getenv("R_PACKAGES"), "\n", fixed = TRUE)[[1]]; writeLines(remotes::system_requirements("ubuntu", "20.04", package = args))' | \

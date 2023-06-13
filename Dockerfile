@@ -14,11 +14,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install remotes R package
 RUN R -e 'install.packages("remotes", repos = "https://cloud.r-project.org")'
 
-# Define the R packages vector
-ENV R_PACKAGES=$(cat r_packages.txt)
-
 # Install system dependencies for the specified R packages
-RUN Rscript -e 'args <- strsplit(Sys.getenv("R_PACKAGES"), "\n", fixed = TRUE)[[1]]; writeLines(remotes::system_requirements("ubuntu", "20.04", package = args))' | \
+RUN R_PACKAGES=$(cat r_packages.txt) && \
+    Rscript -e 'args <- strsplit(Sys.getenv("R_PACKAGES"), "\n", fixed = TRUE)[[1]]; writeLines(remotes::system_requirements("ubuntu", "20.04", package = args))' | \
     while read -r cmd; do \
     eval sudo $cmd; \
     done

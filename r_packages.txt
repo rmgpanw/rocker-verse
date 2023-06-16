@@ -4,6 +4,7 @@ crew
 dplyr
 flextable
 future
+future.batchtools
 gt
 gtsummary
 knitr
@@ -17,6 +18,7 @@ rstudioapi
 shiny
 shinybusy
 shinyWidgets
+stringi
 targets
 tarchetypes
 tidyverse
